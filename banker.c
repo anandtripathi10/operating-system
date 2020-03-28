@@ -12,9 +12,9 @@ int main()
   scanf("%d",&RN);
   Nproc=N;
   Nres=RN;
-  resourse=(int *)malloc(Nproc*sizeof(*resourse));
-  printf("\n\t\tAvailable Resources :"));
-  for(int i=0;i<Nproc;i++)
+  resourse=(int *)malloc(Nproc*sizeof(resourse));
+  printf("\n\t\tAvailable Resources :");
+  for(int i=0;i<res;i++)
     scanf("%d ",&resourse[i]);
   allocate=(int**)malloc(Nres*sizeof(*allocate));
   for(int i=0;i<Nproc;i++)
