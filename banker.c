@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<stdlib.h>
 #include<unistd.h>
 #include<pthread.h>
 int Nproc,Nres;
@@ -34,7 +35,14 @@ int main()
       for(int j=0;j<Nres;j++)
         scanf("%d",&maxarr[i][j]);
     }
-  
+  need = (int **)malloc(Nproc * sizeof(*need));
+        for(int i=0; i<Nproc; i++)
+                need[i] = (int *)malloc(Nres * sizeof(**need));
+
+        for(int i=0; i<Nproc; i++)
+                for(int j=0; j<Nres; j++)
+                        need[i][j] = maxarr[i][j] - allocate[i][j];
+
   
   
 }
