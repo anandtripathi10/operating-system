@@ -96,7 +96,7 @@ bool checksafe()
       if(!safety)
       {
         for(int k=0;k<Nproc;k++)
-          safe[k]=-1;
+        { safe[k]=-1; return false;}
       }
     }
     return true;
