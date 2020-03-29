@@ -143,6 +143,7 @@ int main()
                 for(int j=0; j<Nres; j++)
                         need[i][j] = maxarr[i][j] - allocate[i][j];
   
+  
   safe=(int*)malloc(Nproc*sizeof(*safe));
   for(int i=0; i<Nproc; i++) 
     safe[i] = -1;
