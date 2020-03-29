@@ -3,8 +3,59 @@
 #include<unistd.h>
 #include<pthread.h>
 #include<stdbool.h>
-int Nproc,Nres;
+#include<time.h>
+int Nproc,Nres,ProcComplete=0;
 int *resourse,**allocate,**maxarr,**need,*safe;
+pthread_mutex_t lockResources;
+pthread_cond_t condition;
+void *ProcessExe(void *arg)
+{
+  int p=*((int *)arg);
+  pthread_mutex_lock(&lockResources);
+  while(p!=safe[ProcComplete])
+    pthread_cond_wait(&condition,&lockResources);
+  printf("\n\n\tProcess no : %d",p+1);
+  printf("\n\nAllocated Resources: ");
+  for(int i=0;i<Nres;i++)
+  {
+    printf("   %d",allocate[p][i]);
+          
+  }
+    printf("\n\t\tResourses needed:  ");
+           
+    for(int i=0; i<Nres; i++) 
+       printf("   %d", need[p][i]); 
+     
+     printf("\n\t\nNow Available  Resources are : "); 
+     for(int i=0; i<Nres; i++) 
+           printf("%3d", resourse[i]); 
+     printf("\n");
+           sleep(1);
+           printf("\n\tResourses are Allocated: ");
+           sleep(1);
+           printf("\n\tProcess Executing : ");
+           sleep(rand()%3+2);
+           printf("\n\tProcess Executed: ");
+           sleep(1);
+           printf("\n\tProcess Releasing the Resources:");
+           sleep(1);
+           printf("\n\tResources are released : ");
+           for(int i=0;i<Nres;i++)
+           resourse[i]+=allocate[p][i];
+           printf("\n\t\tNow Available : ");
+           for(int i=0;i<Nres;i++)
+           printf("   %d",resourse[i]);
+           sleep(1);
+           ProcComplete++;
+           
+           pthread_cond_broadcast(&condition);
+           pthread_mutex_unlock(&lockResources);
+           pthread_exit(NULL);
+           
+
+         
+}
+
 bool checksafe()
 {
   int temp[Nres];
@@ -60,11 +111,11 @@ int main()
   scanf("%d",&RN);
   Nproc=N;
   Nres=RN;
-  resourse=(int *)malloc(Nproc*sizeof(resourse));
+  resourse=(int *)malloc(Nres*sizeof(resourse));
   printf("\n\t\tAvailable Resources :");
   for(int i=0;i<Nres;i++)
-    scanf("%d ",&resourse[i]);
-  allocate=(int**)malloc(Nres*sizeof(*allocate));
+    scanf("%d",&resourse[i]);
+  allocate=(int**)malloc(Nproc*sizeof(*allocate));
   for(int i=0;i<Nproc;i++)
     allocate[i]=(int *)malloc(Nres*sizeof(**allocate));
   maxarr = (int **)malloc(Nproc * sizeof(*maxarr));
@@ -100,10 +151,18 @@ int main()
 
   }
    for(int i=0; i<Nproc; i++) { 
-               printf("    %d", safe[i]+1); 
+     printf("    %d", safe[i]+1); 
          } 
 
-  
-  
+  pthread_t process[Nproc];
+  pthread_attr_t attr;
+  pthread_attr_init(&attr);
+  int processNum[Nproc];
+  for(int i=0;i<Nproc;i++)
+    processNum[i]=i;
+  for(int i=0;i<Nproc;i++)
+    pthread_create(&process[i],&attr,ProcessExe,(void*)(&processNum[i]));
+  for(int i=0;i<Nproc;i++)
+    pthread_join(process[i],NULL);
+  printf("\n\n\tTask completed");
 }
-
