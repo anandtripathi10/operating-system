@@ -14,7 +14,7 @@ void *ProcessExe(void *arg)
   pthread_mutex_lock(&lockResources);
   while(p!=safe[ProcComplete])
     pthread_cond_wait(&condition,&lockResources);
-  printf("\n\n==========  Process no : %d   ==========>",p+1);
+  printf("\n\n========  Process no : %d   ========>",p+1);
   printf("    Allocated Resources: ");
   for(int i=0;i<Nres;i++)
   {
@@ -26,7 +26,7 @@ void *ProcessExe(void *arg)
     for(int i=0; i<Nres; i++) 
        printf(" %d", need[p][i]); 
      
-     printf("\n\tNow Available  Resources are : "); 
+     printf("\n\t\t\t\t\tNow Available  Resources are : "); 
      for(int i=0; i<Nres; i++) 
            printf(" %d", resourse[i]); 
      printf("\n");
