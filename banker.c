@@ -14,37 +14,37 @@ void *ProcessExe(void *arg)
   pthread_mutex_lock(&lockResources);
   while(p!=safe[ProcComplete])
     pthread_cond_wait(&condition,&lockResources);
-  printf("\n\n==========+  Process no : %d   ==========",p+1);
-  printf("\n\nAllocated Resources: ");
+  printf("\n\n==========  Process no : %d   ==========>",p+1);
+  printf("    Allocated Resources: ");
   for(int i=0;i<Nres;i++)
   {
-    printf("   %d",allocate[p][i]);
+    printf("  %d",allocate[p][i]);
           
   }
-    printf("\n\t\tResourses needed:  ");
+    printf("\n\t\t\t\t\tResourses needed:  ");
            
     for(int i=0; i<Nres; i++) 
-       printf("   %d", need[p][i]); 
+       printf(" %d", need[p][i]); 
      
      printf("\n\tNow Available  Resources are : "); 
      for(int i=0; i<Nres; i++) 
-           printf("%3d", resourse[i]); 
+           printf(" %d", resourse[i]); 
      printf("\n");
            sleep(1);
-           printf("\n  \tResourses are Allocated: ");
+           printf("\n\t\t\t\t\tResourses are Allocated: ");
            sleep(1);
-           printf("\n  \tProcess is Executing : ");
+           printf("\n\t\t\t\t\tProcess is Executing : ");
            sleep(rand()%3+2);
-           printf("\n  \tProcess Executed: ");
+           printf("\n\t\t\t\t\tProcess Executed: ");
            sleep(1);
-           printf("\n  \tProcess Releasing the Resources:");
+           printf("\n\t\t\t\t\tProcess Releasing the Resources:");
            sleep(1);
-           printf("\n  \tResources are released : ");
+           printf("\n\t\t\t\t\tResources are released : ");
            for(int i=0;i<Nres;i++)
            resourse[i]+=allocate[p][i];
-           printf("\n      \tNow Available : ");
+           printf("\n\tNow Available : ");
            for(int i=0;i<Nres;i++)
-           printf("   %d",resourse[i]);
+           printf(" %d",resourse[i]);
            sleep(1);
            ProcComplete++;
            
@@ -96,7 +96,7 @@ bool checksafe()
       if(!safety)
       {
         for(int k=0;k<Nproc;k++)
-        { safe[k]=-1; return false;}
+        { safe[k]=-1;} return false;
       }
     }
     return true;
@@ -123,12 +123,16 @@ int main()
   maxarr = (int **)malloc(Nproc * sizeof(*maxarr));
         for(int i=0; i<Nproc; i++)
                 maxarr[i] = (int *)malloc(Nres*sizeof(**maxarr));
+  printf("\n++++++++++++++++++  Allocated Resources  +++++++++++++++");
+  
   for(int i=0;i<Nproc;i++)
   {
     printf("\nEnter the resource allocated to process %d : ",i+1);
     for(int j=0;j<Nres;j++)
       scanf("%d",&allocate[i][j]);
   }
+  printf("\n++++++++++++++++++  Required resource  ++++++++++++++++++");
+  
     for(int i=0;i<Nproc;i++)
     {
       printf("\nEnter the maximum required resources for the %d process : ",i+1);
@@ -158,6 +162,8 @@ int main()
    for(int i=0; i<Nproc; i++) { 
      printf("    %d", safe[i]+1); 
          } 
+    printf("\n\n\t\t\t\t\t\t=====  Execution Starts  ========\n");
+
 //Implementing Banker algorithm using Multithreaded Program
   pthread_t process[Nproc];
   pthread_attr_t attr;
